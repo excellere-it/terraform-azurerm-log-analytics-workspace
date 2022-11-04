@@ -1,6 +1,23 @@
-# Azure App Service
+# Log Analytics Workspace
 
-Creates an Azure App Service (Windows)
+Creates a logging workspace in Azure
+
+- [Log Analytics Workspace](#log-analytics-workspace)
+  - [Example](#example)
+  - [Required Inputs](#required-inputs)
+    - [<a name="input_name"></a> name](#-name)
+    - [<a name="input_required_tags"></a> required\_tags](#-required_tags)
+    - [<a name="input_resource_group"></a> resource\_group](#-resource_group)
+  - [Optional Inputs](#optional-inputs)
+    - [<a name="input_expiration_years"></a> expiration\_years](#-expiration_years)
+    - [<a name="input_optional_tags"></a> optional\_tags](#-optional_tags)
+  - [Outputs](#outputs)
+    - [<a name="output_id"></a> id](#-id)
+  - [Resources](#resources)
+  - [Requirements](#requirements)
+  - [Providers](#providers)
+  - [Modules](#modules)
+  - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
 
@@ -8,24 +25,35 @@ Creates an Azure App Service (Windows)
 ## Example
 
 ```hcl
+locals {
+  test_namespace = random_pet.instance_id.id
+
+  tags = {
+    Contact    = "nobody@dell.org"
+    Program    = "DYL"
+    Repository = "terraform-azurerm-log-analytics-workspace"
+  }
+}
+
+resource "random_pet" "instance_id" {}
+
+resource "azurerm_resource_group" "example" {
+  location = "centralus"
+  name     = "rg-${local.test_namespace}"
+  tags     = local.tags
+}
+
 module "example" {
   source = "../.."
 
-  location = "centralus"
+  resource_group = azurerm_resource_group.example
+  required_tags  = local.tags
 
   # The following tokens are optional: instance, program
   name = {
     workload    = "apps"
-    instance    = 0
     environment = "sbx"
     program     = "dyl"
-  }
-
-  # Program is optional. To meet compliance requirements, the module uses "Shared" when the tag is omitted.
-  required_tags = {
-    Contact    = "nobody@dell.org"
-    Program    = "DYL"
-    Repository = "terraform-azurerm-resource-group"
   }
 }
 ```
@@ -33,12 +61,6 @@ module "example" {
 ## Required Inputs
 
 The following input variables are required:
-
-### <a name="input_location"></a> [location](#input\_location)
-
-Description: The Azure Region to deploy the resource into.
-
-Type: `string`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
@@ -69,6 +91,19 @@ object({
   })
 ```
 
+### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
+
+Description: The resource group to deploy resources into
+
+Type:
+
+```hcl
+object({
+    location = string
+    name     = string
+  })
+```
+
 ## Optional Inputs
 
 The following input variables are optional (have default values):
@@ -91,13 +126,18 @@ Default: `{}`
 
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_id"></a> [id](#output\_id)
+
+Description: The Log Analytics Workspace ID.
 
 ## Resources
 
 The following resources are used by this module:
 
-- [azurerm_resource_group.rg](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
+- [azurerm_monitor_diagnostic_setting.audits](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) (resource)
 - [time_offset.end_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/offset) (resource)
 - [time_static.create_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) (resource)
 

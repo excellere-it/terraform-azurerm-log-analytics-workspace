@@ -1,4 +1,4 @@
-module github.com/asm-inc/iac-modules/azure-app-service
+module github.com/msdf/terraform-azurerm-log-analytics-workspace
 
 go 1.18
 

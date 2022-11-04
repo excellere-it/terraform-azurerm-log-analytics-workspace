@@ -9,16 +9,6 @@ variable "expiration_years" {
   }
 }
 
-variable "location" {
-  description = "The Azure Region to deploy the resource into."
-  type        = string
-
-  validation {
-    condition     = contains(["centralus", "eastus2", "southafricanorth", "southafricawest"], var.location)
-    error_message = "Must be one of: centralus, eastus2, southafricanorth, southafricawest."
-  }
-}
-
 variable "name" {
   description = "The name tokens used to construct the resource name."
   type = object({
@@ -41,5 +31,14 @@ variable "required_tags" {
     Contact    = string
     Program    = optional(string, "Shared")
     Repository = string
+  })
+}
+
+variable "resource_group" {
+  description = "The resource group to deploy resources into"
+
+  type = object({
+    location = string
+    name     = string
   })
 }
