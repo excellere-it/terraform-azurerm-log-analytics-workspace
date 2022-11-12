@@ -1,20 +1,22 @@
-variable "expiration_years" {
-  default     = 1
-  description = "Used to calculate the value of the EndDate tag by adding the specified number of years to the CreateDate tag."
+variable "expiration_days" {
+  default     = 365
+  description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag."
   type        = number
 
   validation {
-    condition     = 0 < var.expiration_years
-    error_message = "Expiration years must be greater than zero."
+    condition     = 0 < var.expiration_days
+    error_message = "Expiration days must be greater than zero."
   }
 }
 
 variable "name" {
-  description = "The name tokens used to construct the resource name."
+  description = "The name tokens used to construct the resource name and tags."
   type = object({
+    contact     = string
     environment = string
     instance    = optional(number)
     program     = optional(string)
+    repository  = string
     workload    = string
   })
 }
@@ -23,15 +25,6 @@ variable "optional_tags" {
   default     = {}
   description = "A map of additional tags for the resource."
   type        = map(string)
-}
-
-variable "required_tags" {
-  description = "A map of tags required to meet the tag compliance policy."
-  type = object({
-    Contact    = string
-    Program    = optional(string, "Shared")
-    Repository = string
-  })
 }
 
 variable "resource_group" {

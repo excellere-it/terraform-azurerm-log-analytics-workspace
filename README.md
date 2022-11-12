@@ -26,19 +26,15 @@ Creates a logging workspace in Azure
 
 ```hcl
 locals {
+  location       = "centralus"
+  tags           = module.name.tags
   test_namespace = random_pet.instance_id.id
-
-  tags = {
-    Contact    = "nobody@dell.org"
-    Program    = "DYL"
-    Repository = "terraform-azurerm-log-analytics-workspace"
-  }
 }
 
 resource "random_pet" "instance_id" {}
 
 resource "azurerm_resource_group" "example" {
-  location = "centralus"
+  location = local.location
   name     = "rg-${local.test_namespace}"
   tags     = local.tags
 }
@@ -47,13 +43,14 @@ module "example" {
   source = "../.."
 
   resource_group = azurerm_resource_group.example
-  required_tags  = local.tags
 
   # The following tokens are optional: instance, program
   name = {
-    workload    = "apps"
+    contact     = "nobody@dell.org"
     environment = "sbx"
     program     = "dyl"
+    repository  = "terraform-azurerm-log-analytics-workspace"
+    workload    = "apps"
   }
 }
 ```
@@ -64,30 +61,18 @@ The following input variables are required:
 
 ### <a name="input_name"></a> [name](#input\_name)
 
-Description: The name tokens used to construct the resource name.
+Description: The name tokens used to construct the resource name and tags.
 
 Type:
 
 ```hcl
 object({
+    contact     = string
     environment = string
     instance    = optional(number)
     program     = optional(string)
+    repository  = string
     workload    = string
-  })
-```
-
-### <a name="input_required_tags"></a> [required\_tags](#input\_required\_tags)
-
-Description: A map of tags required to meet the tag compliance policy.
-
-Type:
-
-```hcl
-object({
-    Contact    = string
-    Program    = optional(string, "Shared")
-    Repository = string
   })
 ```
 
@@ -108,13 +93,13 @@ object({
 
 The following input variables are optional (have default values):
 
-### <a name="input_expiration_years"></a> [expiration\_years](#input\_expiration\_years)
+### <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days)
 
-Description: Used to calculate the value of the EndDate tag by adding the specified number of years to the CreateDate tag.
+Description: Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag.
 
 Type: `number`
 
-Default: `1`
+Default: `365`
 
 ### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
 
@@ -138,8 +123,6 @@ The following resources are used by this module:
 
 - [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
 - [azurerm_monitor_diagnostic_setting.audits](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) (resource)
-- [time_offset.end_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/offset) (resource)
-- [time_static.create_date](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/static) (resource)
 
 ## Requirements
 
@@ -157,11 +140,15 @@ The following providers are used by this module:
 
 - <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.31)
 
-- <a name="provider_time"></a> [time](#provider\_time) (~> 0.9)
-
 ## Modules
 
-No modules.
+The following Modules are called:
+
+### <a name="module_name"></a> [name](#module\_name)
+
+Source: app.terraform.io/dellfoundation/namer/terraform
+
+Version: 0.0.2
 <!-- END_TF_DOCS -->
 
 ## Update Docs

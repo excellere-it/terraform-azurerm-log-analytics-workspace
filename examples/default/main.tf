@@ -1,17 +1,13 @@
 locals {
+  location       = "centralus"
+  tags           = module.name.tags
   test_namespace = random_pet.instance_id.id
-
-  tags = {
-    Contact    = "nobody@dell.org"
-    Program    = "DYL"
-    Repository = "terraform-azurerm-log-analytics-workspace"
-  }
 }
 
 resource "random_pet" "instance_id" {}
 
 resource "azurerm_resource_group" "example" {
-  location = "centralus"
+  location = local.location
   name     = "rg-${local.test_namespace}"
   tags     = local.tags
 }
@@ -20,12 +16,13 @@ module "example" {
   source = "../.."
 
   resource_group = azurerm_resource_group.example
-  required_tags  = local.tags
 
   # The following tokens are optional: instance, program
   name = {
-    workload    = "apps"
+    contact     = "nobody@dell.org"
     environment = "sbx"
     program     = "dyl"
+    repository  = "terraform-azurerm-log-analytics-workspace"
+    workload    = "apps"
   }
 }
