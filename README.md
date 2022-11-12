@@ -147,17 +147,17 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.28.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.31)
 
-- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9.1)
+- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.28.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.31)
 
-- <a name="provider_time"></a> [time](#provider\_time) (~> 0.9.1)
+- <a name="provider_time"></a> [time](#provider\_time) (~> 0.9)
 
 ## Modules
 
