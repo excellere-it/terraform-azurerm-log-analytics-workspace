@@ -115,6 +115,14 @@ The following outputs are exported:
 
 ### <a name="output_id"></a> [id](#output\_id)
 
+Description: The Log Analytics Workspace Resource ID.
+
+### <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key)
+
+Description: The primary access key.
+
+### <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id)
+
 Description: The Log Analytics Workspace ID.
 
 ## Resources
