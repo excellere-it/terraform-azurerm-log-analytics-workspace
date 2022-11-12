@@ -25,26 +25,15 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   tags                = local.tags
 }
 
-resource "azurerm_monitor_diagnostic_setting" "audits" {
-  name                       = "diag-la"
-  target_resource_id         = azurerm_log_analytics_workspace.workspace.id
+module "diagnostics" {
+  source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
+  version = "0.0.3"
+
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
-  log {
-    category = "Audit"
-    enabled  = true
-
-    retention_policy {
-      enabled = false
-    }
-  }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = false
-
-    retention_policy {
-      enabled = false
+  monitored_services = {
+    la = {
+      id = azurerm_log_analytics_workspace.workspace.id
     }
   }
 }

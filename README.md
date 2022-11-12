@@ -122,7 +122,6 @@ Description: The Log Analytics Workspace ID.
 The following resources are used by this module:
 
 - [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
-- [azurerm_monitor_diagnostic_setting.audits](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_diagnostic_setting) (resource)
 
 ## Requirements
 
@@ -143,6 +142,12 @@ The following providers are used by this module:
 ## Modules
 
 The following Modules are called:
+
+### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
+
+Source: app.terraform.io/dellfoundation/diagnostics/azurerm
+
+Version: 0.0.3
 
 ### <a name="module_name"></a> [name](#module\_name)
 
