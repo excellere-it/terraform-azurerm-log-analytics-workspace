@@ -25,4 +25,11 @@ module "example" {
     repository  = "terraform-azurerm-log-analytics-workspace"
     workload    = "apps"
   }
+
+  solutions = {
+    SQLAuditing = {
+      publisher = "Microsoft"
+      product   = "SQLAuditing"
+    }
+  }
 }

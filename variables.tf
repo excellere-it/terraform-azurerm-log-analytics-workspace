@@ -35,3 +35,13 @@ variable "resource_group" {
     name     = string
   })
 }
+
+variable "solutions" {
+  description = "The Log Analytics solutions to add to the workspace."
+  default     = {}
+
+  type = map(object({
+    publisher = string
+    product   = string
+  }))
+}

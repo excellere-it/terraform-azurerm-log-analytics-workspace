@@ -1,7 +1,3 @@
-locals {
-  tags = merge(module.name.tags, var.optional_tags)
-}
-
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
   version = "0.0.2"
@@ -11,6 +7,7 @@ module "name" {
   expiration_days = var.expiration_days
   instance        = var.name.instance
   location        = var.resource_group.location
+  optional_tags   = var.optional_tags
   program         = var.name.program
   repository      = var.name.repository
   workload        = var.name.workload
@@ -22,7 +19,7 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   resource_group_name = var.resource_group.name
   retention_in_days   = 30
   sku                 = "PerGB2018"
-  tags                = local.tags
+  tags                = module.name.tags
 }
 
 module "diagnostics" {
@@ -35,5 +32,21 @@ module "diagnostics" {
     la = {
       id = azurerm_log_analytics_workspace.workspace.id
     }
+  }
+}
+
+resource "azurerm_log_analytics_solution" "solution" {
+  for_each = var.solutions
+
+  location              = var.resource_group.location
+  resource_group_name   = var.resource_group.name
+  solution_name         = each.key
+  tags                  = module.name.tags
+  workspace_name        = azurerm_log_analytics_workspace.workspace.name
+  workspace_resource_id = azurerm_log_analytics_workspace.workspace.id
+
+  plan {
+    publisher = each.value.publisher
+    product   = each.value.product
   }
 }

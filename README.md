@@ -52,6 +52,13 @@ module "example" {
     repository  = "terraform-azurerm-log-analytics-workspace"
     workload    = "apps"
   }
+
+  solutions = {
+    SQLAuditing = {
+      publisher = "Microsoft"
+      product   = "SQLAuditing"
+    }
+  }
 }
 ```
 
@@ -109,6 +116,21 @@ Type: `map(string)`
 
 Default: `{}`
 
+### <a name="input_solutions"></a> [solutions](#input\_solutions)
+
+Description: The Log Analytics solutions to add to the workspace.
+
+Type:
+
+```hcl
+map(object({
+    publisher = string
+    product   = string
+  }))
+```
+
+Default: `{}`
+
 ## Outputs
 
 The following outputs are exported:
@@ -129,6 +151,7 @@ Description: The Log Analytics Workspace ID.
 
 The following resources are used by this module:
 
+- [azurerm_log_analytics_solution.solution](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution) (resource)
 - [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
 
 ## Requirements
