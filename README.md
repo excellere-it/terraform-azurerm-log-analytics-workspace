@@ -39,12 +39,26 @@ resource "azurerm_resource_group" "example" {
   tags     = local.tags
 }
 
+resource "azurerm_monitor_private_link_scope" "example" {
+  name                = "ampls-${local.test_namespace}"
+  resource_group_name = azurerm_resource_group.example.name
+  tags                = local.tags
+}
+
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "p0action"
+  tags                = local.tags
+}
+
 module "example" {
   source = "../.."
 
-  resource_group = azurerm_resource_group.example
+  action_group_id                       = azurerm_monitor_action_group.example.id
+  azure_monitor_private_link_scope_name = azurerm_monitor_private_link_scope.example.name
+  resource_group                        = azurerm_resource_group.example
 
-  # The following tokens are optional: instance, program
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"
@@ -65,6 +79,18 @@ module "example" {
 ## Required Inputs
 
 The following input variables are required:
+
+### <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id)
+
+Description: The ID of the action group to send alerts to.
+
+Type: `string`
+
+### <a name="input_azure_monitor_private_link_scope_name"></a> [azure\_monitor\_private\_link\_scope\_name](#input\_azure\_monitor\_private\_link\_scope\_name)
+
+Description: The Azure Monitor Private Link Scope name.
+
+Type: `string`
 
 ### <a name="input_name"></a> [name](#input\_name)
 
@@ -153,6 +179,8 @@ The following resources are used by this module:
 
 - [azurerm_log_analytics_solution.solution](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution) (resource)
 - [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
+- [azurerm_monitor_private_link_scoped_service.ampls](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_private_link_scoped_service) (resource)
+- [azurerm_monitor_scheduled_query_rules_alert_v2.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_scheduled_query_rules_alert_v2) (resource)
 
 ## Requirements
 
@@ -184,7 +212,7 @@ Version: 0.0.3
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.2
+Version: 0.0.5
 <!-- END_TF_DOCS -->
 
 ## Update Docs

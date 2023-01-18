@@ -12,12 +12,26 @@ resource "azurerm_resource_group" "example" {
   tags     = local.tags
 }
 
+resource "azurerm_monitor_private_link_scope" "example" {
+  name                = "ampls-${local.test_namespace}"
+  resource_group_name = azurerm_resource_group.example.name
+  tags                = local.tags
+}
+
+resource "azurerm_monitor_action_group" "example" {
+  name                = "CriticalAlertsAction"
+  resource_group_name = azurerm_resource_group.example.name
+  short_name          = "p0action"
+  tags                = local.tags
+}
+
 module "example" {
   source = "../.."
 
-  resource_group = azurerm_resource_group.example
+  action_group_id                       = azurerm_monitor_action_group.example.id
+  azure_monitor_private_link_scope_name = azurerm_monitor_private_link_scope.example.name
+  resource_group                        = azurerm_resource_group.example
 
-  # The following tokens are optional: instance, program
   name = {
     contact     = "nobody@dell.org"
     environment = "sbx"

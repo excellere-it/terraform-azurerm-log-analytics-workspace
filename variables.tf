@@ -1,3 +1,13 @@
+variable "action_group_id" {
+  description = "The ID of the action group to send alerts to."
+  type        = string
+}
+
+variable "azure_monitor_private_link_scope_name" {
+  description = "The Azure Monitor Private Link Scope name."
+  type        = string
+}
+
 variable "expiration_days" {
   default     = 365
   description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag."
