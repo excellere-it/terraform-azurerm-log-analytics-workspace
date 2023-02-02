@@ -44,45 +44,6 @@ locals {
   }
 }
 
-module "name" {
-  source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.5"
-
-  contact         = var.name.contact
-  environment     = var.name.environment
-  expiration_days = var.expiration_days
-  instance        = var.name.instance
-  location        = var.resource_group.location
-  optional_tags   = var.optional_tags
-  program         = var.name.program
-  repository      = var.name.repository
-  workload        = var.name.workload
-}
-
-resource "azurerm_log_analytics_workspace" "workspace" {
-  internet_ingestion_enabled = false
-  internet_query_enabled     = false
-  location                   = var.resource_group.location
-  name                       = "la-${module.name.resource_suffix}"
-  resource_group_name        = var.resource_group.name
-  retention_in_days          = 30
-  sku                        = "PerGB2018"
-  tags                       = module.name.tags
-}
-
-module "diagnostics" {
-  source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.3"
-
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
-
-  monitored_services = {
-    la = {
-      id = azurerm_log_analytics_workspace.workspace.id
-    }
-  }
-}
-
 resource "azurerm_log_analytics_solution" "solution" {
   for_each = var.solutions
 
@@ -97,6 +58,56 @@ resource "azurerm_log_analytics_solution" "solution" {
     publisher = each.value.publisher
     product   = each.value.product
   }
+}
+
+resource "azurerm_monitor_data_collection_rule" "dcr" {
+  description         = "Data collection rule for VM Insights."
+  location            = var.resource_group.location
+  name                = "MSVMI-${azurerm_log_analytics_workspace.workspace.name}"
+  resource_group_name = var.resource_group.name
+  tags                = module.name.tags
+
+  data_flow {
+    destinations = ["VMInsightsPerf-Logs-Dest"]
+    streams      = ["Microsoft-InsightsMetrics"]
+  }
+
+  data_flow {
+    destinations = ["VMInsightsPerf-Logs-Dest"]
+    streams      = ["Microsoft-ServiceMap"]
+  }
+
+  data_sources {
+    extension {
+      extension_name = "DependencyAgent"
+      name           = "DependencyAgentDataSource"
+      streams        = ["Microsoft-ServiceMap"]
+    }
+    performance_counter {
+      counter_specifiers            = ["\\VmInsights\\DetailedMetrics"]
+      name                          = "VMInsightsPerfCounters"
+      sampling_frequency_in_seconds = 60
+      streams                       = ["Microsoft-InsightsMetrics"]
+    }
+  }
+
+  destinations {
+    log_analytics {
+      name                  = "VMInsightsPerf-Logs-Dest"
+      workspace_resource_id = azurerm_log_analytics_workspace.workspace.id
+    }
+  }
+}
+
+resource "azurerm_log_analytics_workspace" "workspace" {
+  internet_ingestion_enabled = false
+  internet_query_enabled     = false
+  location                   = var.resource_group.location
+  name                       = "la-${module.name.resource_suffix}"
+  resource_group_name        = var.resource_group.name
+  retention_in_days          = 30
+  sku                        = "PerGB2018"
+  tags                       = module.name.tags
 }
 
 resource "azurerm_monitor_private_link_scoped_service" "ampls" {
@@ -135,4 +146,32 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
       number_of_evaluation_periods             = each.value.number_of_evaluation_periods
     }
   }
+}
+
+module "diagnostics" {
+  source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
+  version = "0.0.8"
+
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
+
+  monitored_services = {
+    la = {
+      id = azurerm_log_analytics_workspace.workspace.id
+    }
+  }
+}
+
+module "name" {
+  source  = "app.terraform.io/dellfoundation/namer/terraform"
+  version = "0.0.5"
+
+  contact         = var.name.contact
+  environment     = var.name.environment
+  expiration_days = var.expiration_days
+  instance        = var.name.instance
+  location        = var.resource_group.location
+  optional_tags   = var.optional_tags
+  program         = var.name.program
+  repository      = var.name.repository
+  workload        = var.name.workload
 }

@@ -27,6 +27,7 @@ Creates a logging workspace in Azure
 
 <!-- BEGIN_TF_DOCS -->
 
+
 ## Example
 
 ```hcl
@@ -184,6 +185,7 @@ The following resources are used by this module:
 
 - [azurerm_log_analytics_solution.solution](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution) (resource)
 - [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
+- [azurerm_monitor_data_collection_rule.dcr](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_data_collection_rule) (resource)
 - [azurerm_monitor_private_link_scoped_service.ampls](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_private_link_scoped_service) (resource)
 - [azurerm_monitor_scheduled_query_rules_alert_v2.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_scheduled_query_rules_alert_v2) (resource)
 
@@ -193,15 +195,13 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.3.3)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.31)
-
-- <a name="requirement_time"></a> [time](#requirement\_time) (~> 0.9)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.41)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.31)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.41)
 
 ## Modules
 
@@ -211,7 +211,7 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.3
+Version: 0.0.8
 
 ### <a name="module_name"></a> [name](#module\_name)
 
