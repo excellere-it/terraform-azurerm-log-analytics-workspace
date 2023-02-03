@@ -6,7 +6,7 @@ Creates a logging workspace in Azure
   - [Example](#example)
   - [Required Inputs](#required-inputs)
     - [ action\_group\_id](#-action_group_id)
-    - [ azure\_monitor\_private\_link\_scope\_name](#-azure_monitor_private_link_scope_name)
+    - [ azure\_monitor\_private\_link\_scope](#-azure_monitor_private_link_scope)
     - [ name](#-name)
     - [ resource\_group](#-resource_group)
   - [Optional Inputs](#optional-inputs)
@@ -26,7 +26,6 @@ Creates a logging workspace in Azure
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
-
 
 ## Example
 
@@ -61,9 +60,13 @@ resource "azurerm_monitor_action_group" "example" {
 module "example" {
   source = "../.."
 
-  action_group_id                       = azurerm_monitor_action_group.example.id
-  azure_monitor_private_link_scope_name = azurerm_monitor_private_link_scope.example.name
-  resource_group                        = azurerm_resource_group.example
+  action_group_id = azurerm_monitor_action_group.example.id
+  resource_group  = azurerm_resource_group.example
+
+  azure_monitor_private_link_scope = {
+    name                = azurerm_monitor_private_link_scope.example.name
+    resource_group_name = azurerm_resource_group.example.name
+  }
 
   name = {
     contact     = "nobody@dell.org"
@@ -92,11 +95,18 @@ Description: The ID of the action group to send alerts to.
 
 Type: `string`
 
-### <a name="input_azure_monitor_private_link_scope_name"></a> [azure\_monitor\_private\_link\_scope\_name](#input\_azure\_monitor\_private\_link\_scope\_name)
+### <a name="input_azure_monitor_private_link_scope"></a> [azure\_monitor\_private\_link\_scope](#input\_azure\_monitor\_private\_link\_scope)
 
 Description: The Azure Monitor Private Link Scope name.
 
-Type: `string`
+Type:
+
+```hcl
+object({
+    name                = string
+    resource_group_name = string
+  })
+```
 
 ### <a name="input_name"></a> [name](#input\_name)
 

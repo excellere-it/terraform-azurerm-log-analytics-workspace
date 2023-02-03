@@ -60,6 +60,17 @@ resource "azurerm_log_analytics_solution" "solution" {
   }
 }
 
+resource "azurerm_log_analytics_workspace" "workspace" {
+  internet_ingestion_enabled = false
+  internet_query_enabled     = false
+  location                   = var.resource_group.location
+  name                       = "la-${module.name.resource_suffix}"
+  resource_group_name        = var.resource_group.name
+  retention_in_days          = 30
+  sku                        = "PerGB2018"
+  tags                       = module.name.tags
+}
+
 resource "azurerm_monitor_data_collection_rule" "dcr" {
   description         = "Data collection rule for VM Insights."
   location            = var.resource_group.location
@@ -99,22 +110,11 @@ resource "azurerm_monitor_data_collection_rule" "dcr" {
   }
 }
 
-resource "azurerm_log_analytics_workspace" "workspace" {
-  internet_ingestion_enabled = false
-  internet_query_enabled     = false
-  location                   = var.resource_group.location
-  name                       = "la-${module.name.resource_suffix}"
-  resource_group_name        = var.resource_group.name
-  retention_in_days          = 30
-  sku                        = "PerGB2018"
-  tags                       = module.name.tags
-}
-
 resource "azurerm_monitor_private_link_scoped_service" "ampls" {
   linked_resource_id  = azurerm_log_analytics_workspace.workspace.id
   name                = "amplss-${module.name.resource_suffix}"
-  resource_group_name = var.resource_group.name
-  scope_name          = var.azure_monitor_private_link_scope_name
+  resource_group_name = var.azure_monitor_private_link_scope.resource_group_name
+  scope_name          = var.azure_monitor_private_link_scope.name
 }
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {

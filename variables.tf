@@ -3,9 +3,12 @@ variable "action_group_id" {
   type        = string
 }
 
-variable "azure_monitor_private_link_scope_name" {
+variable "azure_monitor_private_link_scope" {
   description = "The Azure Monitor Private Link Scope name."
-  type        = string
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
 }
 
 variable "expiration_days" {
