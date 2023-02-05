@@ -14,6 +14,7 @@ Creates a logging workspace in Azure
     - [ optional\_tags](#-optional_tags)
     - [ solutions](#-solutions)
   - [Outputs](#outputs)
+    - [ data\_collection\_rule\_id](#-data_collection_rule_id)
     - [ id](#-id)
     - [ primary\_shared\_key](#-primary_shared_key)
     - [ workspace\_id](#-workspace_id)
@@ -176,6 +177,10 @@ Default: `{}`
 ## Outputs
 
 The following outputs are exported:
+
+### <a name="output_data_collection_rule_id"></a> [data\_collection\_rule\_id](#output\_data\_collection\_rule\_id)
+
+Description: The Data Collection Rule ID.
 
 ### <a name="output_id"></a> [id](#output\_id)
 

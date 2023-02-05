@@ -1,3 +1,8 @@
+output "data_collection_rule_id" {
+  description = "The Data Collection Rule ID."
+  value       = azurerm_monitor_data_collection_rule.dcr.id
+}
+
 output "id" {
   description = "The Log Analytics Workspace Resource ID."
   value       = azurerm_log_analytics_workspace.workspace.id
