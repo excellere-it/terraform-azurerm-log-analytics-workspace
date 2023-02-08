@@ -28,6 +28,7 @@ Creates a logging workspace in Azure
 
 <!-- BEGIN_TF_DOCS -->
 
+
 ## Example
 
 ```hcl
@@ -226,7 +227,7 @@ The following Modules are called:
 
 Source: app.terraform.io/dellfoundation/diagnostics/azurerm
 
-Version: 0.0.8
+Version: 0.0.9
 
 ### <a name="module_name"></a> [name](#module\_name)
 
