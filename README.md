@@ -16,6 +16,7 @@ Creates a logging workspace in Azure
   - [Outputs](#outputs)
     - [ data\_collection\_rule\_id](#-data_collection_rule_id)
     - [ id](#-id)
+    - [ location](#-location)
     - [ primary\_shared\_key](#-primary_shared_key)
     - [ workspace\_id](#-workspace_id)
   - [Resources](#resources)
@@ -27,6 +28,7 @@ Creates a logging workspace in Azure
   - [Update Docs](#update-docs)
 
 <!-- BEGIN_TF_DOCS -->
+
 
 
 ## Example
@@ -186,6 +188,10 @@ Description: The Data Collection Rule ID.
 ### <a name="output_id"></a> [id](#output\_id)
 
 Description: The Log Analytics Workspace Resource ID.
+
+### <a name="output_location"></a> [location](#output\_location)
+
+Description: The location of the Log Analytics Workspace.
 
 ### <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key)
 

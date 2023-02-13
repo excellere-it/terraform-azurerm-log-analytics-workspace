@@ -3,6 +3,11 @@ output "data_collection_rule_id" {
   value       = azurerm_monitor_data_collection_rule.dcr.id
 }
 
+output "location" {
+  description = "The location of the Log Analytics Workspace."
+  value       = azurerm_log_analytics_workspace.workspace.location
+}
+
 output "id" {
   description = "The Log Analytics Workspace Resource ID."
   value       = azurerm_log_analytics_workspace.workspace.id
