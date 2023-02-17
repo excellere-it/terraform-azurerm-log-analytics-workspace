@@ -4,7 +4,7 @@ variable "action_group_id" {
 }
 
 variable "azure_monitor_private_link_scope" {
-  description = "The Azure Monitor Private Link Scope name."
+  description = "The Azure Monitor Private Link Scope."
   type = object({
     name                = string
     resource_group_name = string
