@@ -163,7 +163,7 @@ module "diagnostics" {
 
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.5"
+  version = "0.0.6"
 
   contact         = var.name.contact
   environment     = var.name.environment

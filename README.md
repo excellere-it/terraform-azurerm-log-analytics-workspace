@@ -30,7 +30,6 @@ Creates a logging workspace in Azure
 <!-- BEGIN_TF_DOCS -->
 
 
-
 ## Example
 
 ```hcl
@@ -101,7 +100,7 @@ Type: `string`
 
 ### <a name="input_azure_monitor_private_link_scope"></a> [azure\_monitor\_private\_link\_scope](#input\_azure\_monitor\_private\_link\_scope)
 
-Description: The Azure Monitor Private Link Scope name.
+Description: The Azure Monitor Private Link Scope.
 
 Type:
 
@@ -239,7 +238,7 @@ Version: 0.0.9
 
 Source: app.terraform.io/dellfoundation/namer/terraform
 
-Version: 0.0.5
+Version: 0.0.6
 <!-- END_TF_DOCS -->
 
 ## Update Docs
