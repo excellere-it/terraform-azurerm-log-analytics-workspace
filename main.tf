@@ -61,8 +61,8 @@ resource "azurerm_log_analytics_solution" "solution" {
 }
 
 resource "azurerm_log_analytics_workspace" "workspace" {
-  internet_ingestion_enabled = false
-  internet_query_enabled     = false
+  internet_ingestion_enabled = true
+  internet_query_enabled     = true
   location                   = var.resource_group.location
   name                       = "la-${module.name.resource_suffix}"
   resource_group_name        = var.resource_group.name
