@@ -150,7 +150,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
 
 module "diagnostics" {
   source  = "app.terraform.io/dellfoundation/diagnostics/azurerm"
-  version = "0.0.9"
+  version = "0.0.10"
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
@@ -163,7 +163,7 @@ module "diagnostics" {
 
 module "name" {
   source  = "app.terraform.io/dellfoundation/namer/terraform"
-  version = "0.0.6"
+  version = "0.0.7"
 
   contact         = var.name.contact
   environment     = var.name.environment
