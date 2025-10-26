@@ -1,3 +1,107 @@
+# =============================================================================
+# Module: Azure Log Analytics Workspace
+# =============================================================================
+#
+# Purpose:
+#   This Terraform module creates and manages an Azure Log Analytics Workspace
+#   with integrated monitoring, alerting, and data collection capabilities.
+#
+# Features:
+#   - **Log Analytics Workspace**: Centralized log collection and analysis
+#   - **VM Insights Integration**: Data collection rules for virtual machine monitoring
+#   - **Solutions Management**: Deploy workspace solutions (e.g., SecurityCenter, Updates)
+#   - **Alert Rules**: Pre-configured alerts for operational issues and ingestion limits
+#   - **Data Collection Rules**: VM Insights performance and dependency tracking
+#   - **Standardized Naming**: Uses terraform-terraform-namer for consistent naming
+#   - **Tagging**: Applies consistent tags across all resources
+#
+# Resources Created:
+#   - **Log Analytics Workspace** (`azurerm_log_analytics_workspace.workspace`)
+#     - Name format: `la-{resource_suffix}`
+#     - SKU: PerGB2018 (pay-as-you-go)
+#     - Retention: 90 days
+#     - Internet ingestion and query: enabled
+#
+#   - **Data Collection Rule** (`azurerm_monitor_data_collection_rule.dcr`)
+#     - Name format: `MSVMI-{workspace-name}`
+#     - Streams: InsightsMetrics, ServiceMap
+#     - Performance counters: VM Insights detailed metrics
+#     - Dependency Agent integration
+#
+#   - **Scheduled Query Rules** (`azurerm_monitor_scheduled_query_rules_alert_v2.alert`)
+#     - APOT: Operational issues warning (severity 3, daily check)
+#     - APIT: Ingestion rate limit exceeded (severity 2, 5-minute check)
+#     - APCT: Daily cap hit (severity 2, 5-minute check)
+#
+#   - **Workspace Solutions** (`azurerm_log_analytics_solution.solution`)
+#     - Configurable solutions (SecurityCenter, Updates, ChangeTracking, etc.)
+#     - Auto-deploys based on var.solutions map
+#
+# Use Cases:
+#   - **Centralized Logging**: Collect logs from Azure resources, VMs, containers
+#   - **VM Monitoring**: Enable VM Insights for performance and dependency tracking
+#   - **Security Monitoring**: Deploy SecurityCenter solution for threat detection
+#   - **Compliance**: Retain logs for regulatory compliance (configurable retention)
+#   - **Cost Management**: Monitor ingestion rates and daily caps to control costs
+#
+# Azure Log Analytics Documentation:
+#   https://docs.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview
+#
+# Example:
+#   ```hcl
+#   module "log_analytics" {
+#     source = "path/to/module"
+#
+#     action_group_id = azurerm_monitor_action_group.example.id
+#     resource_group = {
+#       name     = azurerm_resource_group.example.name
+#       location = azurerm_resource_group.example.location
+#     }
+#
+#     solutions = {
+#       "SecurityCenterFree" = {
+#         publisher = "Microsoft"
+#         product   = "OMSGallery/SecurityCenterFree"
+#       }
+#     }
+#
+#     name = {
+#       contact     = "devops@example.com"
+#       environment = "prod"
+#       repository  = "terraform-infrastructure"
+#       workload    = "monitoring"
+#     }
+#   }
+#   ```
+#
+# Notes:
+#   - Workspace SKU is fixed to PerGB2018 (pay-per-GB ingested)
+#   - Retention is fixed to 90 days (modify in main.tf if needed)
+#   - Internet ingestion/query enabled by default (set to false for private-only)
+#   - VM Insights DCR is automatically created for each workspace
+#   - Alert rules query the _LogOperation table (workspace operational logs)
+#   - Solutions must be specified in the solutions variable (map of objects)
+#
+# Dependencies:
+#   - terraform-terraform-namer (required for naming and tagging)
+#   - azurerm_monitor_action_group (required for alert notifications)
+#
+# Performance Considerations:
+#   - Ingestion rate limits: Varies by workspace (monitored by APIT alert)
+#   - Daily cap: Optional cost control (monitored by APCT alert)
+#   - Query performance: Depends on data volume and query complexity
+#   - Data retention: Longer retention increases storage costs
+#
+# Security:
+#   - RBAC recommended for access control
+#   - Network isolation available via Private Link (not configured in this module)
+#   - Customer-managed keys supported for encryption at rest (not configured in this module)
+#
+# =============================================================================
+
+# Section: Alert Definitions
+# =============================================================================
+
 locals {
   alert = {
     APOT = {
@@ -44,6 +148,9 @@ locals {
   }
 }
 
+# Section: Workspace Solutions
+# =============================================================================
+
 resource "azurerm_log_analytics_solution" "solution" {
   for_each = var.solutions
 
@@ -60,6 +167,9 @@ resource "azurerm_log_analytics_solution" "solution" {
   }
 }
 
+# Section: Log Analytics Workspace
+# =============================================================================
+
 resource "azurerm_log_analytics_workspace" "workspace" {
   internet_ingestion_enabled = true
   internet_query_enabled     = true
@@ -70,6 +180,9 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   sku                        = "PerGB2018"
   tags                       = module.name.tags
 }
+
+# Section: Data Collection Rule (VM Insights)
+# =============================================================================
 
 resource "azurerm_monitor_data_collection_rule" "dcr" {
   description         = "Data collection rule for VM Insights."
@@ -110,12 +223,18 @@ resource "azurerm_monitor_data_collection_rule" "dcr" {
   }
 }
 
+# Section: Private Link Scoped Service
+# =============================================================================
+
 resource "azurerm_monitor_private_link_scoped_service" "ampls" {
   linked_resource_id  = azurerm_log_analytics_workspace.workspace.id
   name                = "amplss-${module.name.resource_suffix}"
   resource_group_name = var.azure_monitor_private_link_scope.resource_group_name
   scope_name          = var.azure_monitor_private_link_scope.name
 }
+
+# Section: Scheduled Query Alert Rules
+# =============================================================================
 
 resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
   for_each = local.alert
@@ -148,9 +267,11 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
   }
 }
 
+# Section: Diagnostic Settings
+# =============================================================================
+
 module "diagnostics" {
-  source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.1"
+  source = "../terraform-azurerm-diagnostics"
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
@@ -161,17 +282,17 @@ module "diagnostics" {
   }
 }
 
-module "name" {
-  source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.1"
+# Section: Naming and Tagging
+# =============================================================================
 
-  contact         = var.name.contact
-  environment     = var.name.environment
-  expiration_days = var.expiration_days
-  instance        = var.name.instance
-  location        = var.resource_group.location
-  optional_tags   = var.optional_tags
-  program         = var.name.program
-  repository      = var.name.repository
-  workload        = var.name.workload
+module "name" {
+  source = "../terraform-terraform-namer"
+
+  contact       = var.name.contact
+  environment   = var.name.environment
+  instance      = var.name.instance
+  location      = var.resource_group.location
+  optional_tags = var.optional_tags
+  repository    = var.name.repository
+  workload      = var.name.workload
 }
