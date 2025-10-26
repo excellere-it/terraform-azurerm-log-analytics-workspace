@@ -11,24 +11,12 @@ variable "azure_monitor_private_link_scope" {
   })
 }
 
-variable "expiration_days" {
-  default     = 365
-  description = "Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag."
-  type        = number
-
-  validation {
-    condition     = 0 < var.expiration_days
-    error_message = "Expiration days must be greater than zero."
-  }
-}
-
 variable "name" {
   description = "The name tokens used to construct the resource name and tags."
   type = object({
     contact     = string
     environment = string
     instance    = optional(number)
-    program     = optional(string)
     repository  = string
     workload    = string
   })

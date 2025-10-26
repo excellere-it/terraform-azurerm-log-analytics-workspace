@@ -71,7 +71,7 @@ module "example" {
   }
 
   name = {
-    contact     = "nobody@dell.org"
+    contact     = "nobody@infoex.dev"
     environment = "sbx"
     program     = "dyl"
     repository  = "terraform-azurerm-log-analytics-workspace"

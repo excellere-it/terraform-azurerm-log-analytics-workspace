@@ -1,5 +1,10 @@
 # Input validation tests for Log Analytics Workspace module
 
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true
+}
+
 run "test_valid_configuration" {
   command = plan
 
@@ -30,68 +35,7 @@ run "test_valid_configuration" {
   }
 }
 
-run "test_expiration_days_validation_positive" {
-  command = plan
-
-  variables {
-    action_group_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
-
-    resource_group = {
-      location = "centralus"
-      name     = "rg-test"
-    }
-
-    azure_monitor_private_link_scope = {
-      name                = "ampls-test"
-      resource_group_name = "rg-test"
-    }
-
-    name = {
-      contact     = "test@example.com"
-      environment = "sbx"
-      repository  = "terraform-azurerm-log-analytics-workspace"
-      workload    = "test"
-    }
-
-    expiration_days = 365
-  }
-
-  assert {
-    condition     = var.expiration_days == 365
-    error_message = "Should accept valid expiration_days value"
-  }
-}
-
-run "test_expiration_days_validation_negative" {
-  command = plan
-
-  variables {
-    action_group_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
-
-    resource_group = {
-      location = "centralus"
-      name     = "rg-test"
-    }
-
-    azure_monitor_private_link_scope = {
-      name                = "ampls-test"
-      resource_group_name = "rg-test"
-    }
-
-    name = {
-      contact     = "test@example.com"
-      environment = "sbx"
-      repository  = "terraform-azurerm-log-analytics-workspace"
-      workload    = "test"
-    }
-
-    expiration_days = 0
-  }
-
-  expect_failures = [
-    var.expiration_days,
-  ]
-}
+# Tests for expiration_days removed - variable no longer exists in module
 
 run "test_optional_tags" {
   command = plan
@@ -191,36 +135,7 @@ run "test_name_with_optional_instance" {
   }
 }
 
-run "test_name_with_optional_program" {
-  command = plan
-
-  variables {
-    action_group_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-test/providers/Microsoft.Insights/actionGroups/test-ag"
-
-    resource_group = {
-      location = "centralus"
-      name     = "rg-test"
-    }
-
-    azure_monitor_private_link_scope = {
-      name                = "ampls-test"
-      resource_group_name = "rg-test"
-    }
-
-    name = {
-      contact     = "test@example.com"
-      environment = "sbx"
-      program     = "myprogram"
-      repository  = "terraform-azurerm-log-analytics-workspace"
-      workload    = "test"
-    }
-  }
-
-  assert {
-    condition     = var.name.program == "myprogram"
-    error_message = "Should accept optional program name"
-  }
-}
+# Test removed: 'program' is not supported by terraform-namer module
 
 run "test_different_locations" {
   command = plan
