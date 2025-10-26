@@ -148,6 +148,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
   }
 }
 
+module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
   version = "0.0.1"
 
@@ -160,6 +161,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
   }
 }
 
+module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
   version = "0.0.1"
 
