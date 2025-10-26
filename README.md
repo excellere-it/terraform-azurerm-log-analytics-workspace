@@ -26,7 +26,6 @@ Creates a logging workspace in Azure
     - [ diagnostics](#-diagnostics)
     - [ name](#-name-1)
   - [Update Docs](#update-docs)
-
 <!-- BEGIN_TF_DOCS -->
 
 
@@ -230,13 +229,13 @@ The following Modules are called:
 
 ### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
 
-Source: app.terraform.io/dellfoundation/diagnostics/azurerm
+Source: app.terraform.io/infoex/diagnostics/azurerm
 
 Version: 0.0.10
 
 ### <a name="module_name"></a> [name](#module\_name)
 
-Source: app.terraform.io/dellfoundation/namer/terraform
+Source: app.terraform.io/infoex/namer/terraform
 
 Version: 0.0.8
 <!-- END_TF_DOCS -->

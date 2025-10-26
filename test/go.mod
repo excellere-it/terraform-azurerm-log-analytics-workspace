@@ -1,4 +1,4 @@
-module github.com/msdf/terraform-azurerm-log-analytics-workspace
+module github.com/infoex/terraform-azurerm-log-analytics-workspace
 
 go 1.18
 
