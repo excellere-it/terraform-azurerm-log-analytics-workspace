@@ -148,9 +148,8 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
   }
 }
 
-module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.10"
+  version = "0.0.1"
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
@@ -161,9 +160,8 @@ module "diagnostics" {
   }
 }
 
-module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.8"
+  version = "0.0.1"
 
   contact         = var.name.contact
   environment     = var.name.environment
