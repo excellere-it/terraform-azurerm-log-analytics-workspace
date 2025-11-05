@@ -176,7 +176,7 @@ resource "azurerm_log_analytics_workspace" "workspace" {
   location                   = var.resource_group.location
   name                       = "la-${module.name.resource_suffix}"
   resource_group_name        = var.resource_group.name
-  retention_in_days          = 90
+  retention_in_days          = 365
   sku                        = "PerGB2018"
   tags                       = module.name.tags
 }
@@ -272,7 +272,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
 
 module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.2"
+  version = "0.0.1"
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
@@ -288,7 +288,7 @@ module "diagnostics" {
 
 module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.3"
+  version = "0.0.1"
 
   contact       = var.name.contact
   environment   = var.name.environment
