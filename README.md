@@ -87,157 +87,57 @@ module "example" {
 }
 ```
 
-## Required Inputs
+## Inputs
 
-The following input variables are required:
-
-### <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id)
-
-Description: The ID of the action group to send alerts to.
-
-Type: `string`
-
-### <a name="input_azure_monitor_private_link_scope"></a> [azure\_monitor\_private\_link\_scope](#input\_azure\_monitor\_private\_link\_scope)
-
-Description: The Azure Monitor Private Link Scope.
-
-Type:
-
-```hcl
-object({
-    name                = string
-    resource_group_name = string
-  })
-```
-
-### <a name="input_name"></a> [name](#input\_name)
-
-Description: The name tokens used to construct the resource name and tags.
-
-Type:
-
-```hcl
-object({
-    contact     = string
-    environment = string
-    instance    = optional(number)
-    program     = optional(string)
-    repository  = string
-    workload    = string
-  })
-```
-
-### <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group)
-
-Description: The resource group to deploy resources into
-
-Type:
-
-```hcl
-object({
-    location = string
-    name     = string
-  })
-```
-
-## Optional Inputs
-
-The following input variables are optional (have default values):
-
-### <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days)
-
-Description: Used to calculate the value of the EndDate tag by adding the specified number of days to the CreateDate tag.
-
-Type: `number`
-
-Default: `365`
-
-### <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags)
-
-Description: A map of additional tags for the resource.
-
-Type: `map(string)`
-
-Default: `{}`
-
-### <a name="input_solutions"></a> [solutions](#input\_solutions)
-
-Description: The Log Analytics solutions to add to the workspace.
-
-Type:
-
-```hcl
-map(object({
-    publisher = string
-    product   = string
-  }))
-```
-
-Default: `{}`
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_action_group_id"></a> [action\_group\_id](#input\_action\_group\_id) | The ID of the action group to send alerts to. | `string` | n/a | yes |
+| <a name="input_azure_monitor_private_link_scope"></a> [azure\_monitor\_private\_link\_scope](#input\_azure\_monitor\_private\_link\_scope) | The Azure Monitor Private Link Scope. | <pre>object({<br/>    name                = string<br/>    resource_group_name = string<br/>  })</pre> | n/a | yes |
+| <a name="input_is_global"></a> [is\_global](#input\_is\_global) | Is the resource considered a global resource | `bool` | `false` | no |
+| <a name="input_name"></a> [name](#input\_name) | The name tokens used to construct the resource name and tags. | <pre>object({<br/>    contact     = string<br/>    environment = string<br/>    instance    = optional(number)<br/>    repository  = string<br/>    workload    = string<br/>  })</pre> | n/a | yes |
+| <a name="input_optional_tags"></a> [optional\_tags](#input\_optional\_tags) | A map of additional tags for the resource. | `map(string)` | `{}` | no |
+| <a name="input_resource_group"></a> [resource\_group](#input\_resource\_group) | The resource group to deploy resources into | <pre>object({<br/>    location = string<br/>    name     = string<br/>  })</pre> | n/a | yes |
+| <a name="input_solutions"></a> [solutions](#input\_solutions) | The Log Analytics solutions to add to the workspace. | <pre>map(object({<br/>    publisher = string<br/>    product   = string<br/>  }))</pre> | `{}` | no |
 
 ## Outputs
 
-The following outputs are exported:
-
-### <a name="output_data_collection_rule_id"></a> [data\_collection\_rule\_id](#output\_data\_collection\_rule\_id)
-
-Description: The Data Collection Rule ID.
-
-### <a name="output_id"></a> [id](#output\_id)
-
-Description: The Log Analytics Workspace Resource ID.
-
-### <a name="output_location"></a> [location](#output\_location)
-
-Description: The location of the Log Analytics Workspace.
-
-### <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key)
-
-Description: The primary access key.
-
-### <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id)
-
-Description: The Log Analytics Workspace ID.
+| Name | Description |
+|------|-------------|
+| <a name="output_data_collection_rule_id"></a> [data\_collection\_rule\_id](#output\_data\_collection\_rule\_id) | The Data Collection Rule ID. |
+| <a name="output_id"></a> [id](#output\_id) | The Log Analytics Workspace Resource ID. |
+| <a name="output_location"></a> [location](#output\_location) | The location of the Log Analytics Workspace. |
+| <a name="output_primary_shared_key"></a> [primary\_shared\_key](#output\_primary\_shared\_key) | The primary access key. |
+| <a name="output_workspace_id"></a> [workspace\_id](#output\_workspace\_id) | The Log Analytics Workspace ID. |
 
 ## Resources
 
-The following resources are used by this module:
-
-- [azurerm_log_analytics_solution.solution](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution) (resource)
-- [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) (resource)
-- [azurerm_monitor_data_collection_rule.dcr](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_data_collection_rule) (resource)
-- [azurerm_monitor_private_link_scoped_service.ampls](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_private_link_scoped_service) (resource)
-- [azurerm_monitor_scheduled_query_rules_alert_v2.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_scheduled_query_rules_alert_v2) (resource)
+| Name | Type |
+|------|------|
+| [azurerm_log_analytics_solution.solution](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_solution) | resource |
+| [azurerm_log_analytics_workspace.workspace](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/log_analytics_workspace) | resource |
+| [azurerm_monitor_data_collection_rule.dcr](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_data_collection_rule) | resource |
+| [azurerm_monitor_private_link_scoped_service.ampls](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_private_link_scoped_service) | resource |
+| [azurerm_monitor_scheduled_query_rules_alert_v2.alert](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_scheduled_query_rules_alert_v2) | resource |
 
 ## Requirements
 
-The following requirements are needed by this module:
-
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.13)
-
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 3.47)
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.13 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.47 |
 
 ## Providers
 
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 3.47)
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
 
 ## Modules
 
-The following Modules are called:
-
-### <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics)
-
-Source: app.terraform.io/infoex/diagnostics/azurerm
-
-Version: 0.0.10
-
-### <a name="module_name"></a> [name](#module\_name)
-
-Source: app.terraform.io/infoex/namer/terraform
-
-Version: 0.0.8
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_diagnostics"></a> [diagnostics](#module\_diagnostics) | app.terraform.io/infoex/diagnostics/azurerm | 0.0.2 |
+| <a name="module_name"></a> [name](#module\_name) | app.terraform.io/infoex/namer/terraform | 0.0.3 |
 <!-- END_TF_DOCS -->
 
 ## Update Docs

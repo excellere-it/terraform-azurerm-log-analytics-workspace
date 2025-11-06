@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **COMPLIANCE**: Extended log retention to 365 days (from 90 days) for PCI-DSS 10.7 and SOC 2 compliance
+- Standardized module structure to match reference standards
+- Improved documentation with auto-generated sections
+
 ### Added
 - Comprehensive .gitignore with extensive patterns for security, IDE, and build artifacts
 - Enhanced Makefile with full development automation targets
@@ -16,10 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Native Terraform tests in tests/ directory
 - tests/README.md documenting test approach and usage
 - Enhanced documentation generation with terraform-docs
-
-### Changed
-- Standardized module structure to match reference standards
-- Improved documentation with auto-generated sections
 
 ## [0.0.1] - Previous Release
 
