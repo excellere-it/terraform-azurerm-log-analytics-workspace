@@ -288,7 +288,7 @@ module "diagnostics" {
 
 module "name" {
   source  = "app.terraform.io/infoex/namer/terraform"
-  version = "0.0.1"
+  version = "0.0.2"
 
   contact       = var.name.contact
   environment   = var.name.environment
