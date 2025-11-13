@@ -272,7 +272,7 @@ resource "azurerm_monitor_scheduled_query_rules_alert_v2" "alert" {
 
 module "diagnostics" {
   source  = "app.terraform.io/infoex/diagnostics/azurerm"
-  version = "0.0.4"
+  version = "0.0.5"
 
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
 
