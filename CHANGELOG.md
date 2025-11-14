@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.10] - 2025-01-14
+
+### Changed
+- Updated random provider version to ~> 3.6 in examples
+- Minor dependency updates
+
 ### Changed
 - **COMPLIANCE**: Extended log retention to 365 days (from 90 days) for PCI-DSS 10.7 and SOC 2 compliance
 - Standardized module structure to match reference standards
