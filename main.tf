@@ -286,7 +286,7 @@ module "diagnostics" {
 # =============================================================================
 
 module "name" {
-  source = "git::https://github.com/excellere-it/terraform-namer.git"
+  source = "git::https://github.com/excellere-it/terraform-terraform-namer.git"
 
   contact       = var.name.contact
   environment   = var.name.environment
